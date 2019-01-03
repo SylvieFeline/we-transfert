@@ -1,0 +1,28 @@
+form{
+    display:flex;
+    flex-direction: column;
+    width: 600px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+
+}
+.mail, .fich{
+    display: flex;
+    flex-direction: row;
+}
+.fich{
+    padding: 10px 0;
+}
+input[type=email]{
+    width: 300px;
+}
+label{
+    width: 250px;
+    text-align: end;
+}
+input[type=submit]{
+    width: 100px;
+    align-self: center;
+    margin-top: 10px;
+}
