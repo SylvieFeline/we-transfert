@@ -19,26 +19,32 @@ if ($_FILES['fichier']['error']) {
              break;     
     }  
 }     
-
-
-// -----------déplacement du fichier pour stockage---------
-
-// renommer le fichier pour ne pas avoir de doublon 
-// en utilisant la date et l'heure
-   $extensionFichier = strtolower( substr( strrchr($_FILES['fichier']['name'], '.')  ,1)  );
-   $repertoireDestination = dirname(__FILE__)."/fichiers/";
-   $nomDestination = "fichier_du_".date("YmdHis").".".$extensionFichier;
-   
-
-// par sécurité, modifier l'extension du fichier
-// en ajoutant une extention supplémentaire, en la remplaçant par une autre ou en la supprimant
-
-
-// --> déplacement du fichier  du répertoire temporaire vers un répertoire de destination:
-
 if ((isset($_FILES['fichier']['tmp_name'])&&($_FILES['fichier']['error'] == UPLOAD_ERR_OK))) {     
-    move_uploaded_file($_FILES['fichier']['tmp_name'], $repertoireDestination.$nomDestination);
-    }    
+
+    // vérification de l'extension  (pour une image)
+        $extensions_valides = array( 'jpg' , 'jpeg' , 'gif' , 'png' );
+        $extensionFichier = strtolower(  substr(  strrchr($_FILES['fichier']['name'], '.')  ,1)  );
+        if ( in_array($extensionFichier,$extensions_valides) ) { 
+            echo "Extension correcte";
+
+        // renommer le fichier pour ne pas avoir de doublon 
+        // en utilisant la date et l'heure
+            $repertoireDestination = dirname(__FILE__)."/fichiers/";
+            $nomDestination = "fichier_du_".date("YmdHis").".".$extensionFichier;
+
+        // --> déplacement du fichier  du répertoire temporaire vers un répertoire de destination:
+            move_uploaded_file($_FILES['fichier']['tmp_name'], $repertoireDestination.$nomDestination);
+        
+        // message de confirmation fichier uploader et mail envoyé
+            echo "Votre fichier <strong>". $_FILES['fichier']['name']. "</strong> est maintenant disponible à l'adresse de partage suivante :<br>";
+            echo "http://localhost/sites/weTransfert/fichiers/".$nomDestination."<br>";
+            echo "Un mail a été envoyé à ".$_POST['emailExp']. " pour l'informer de ce partage. <br>";
+            echo "Les D codeurs du lac vous remercie d'avoir utiliser leur systeme de partage de fichier. <br>";
+    
+        }  else {
+            echo "Extension non valide, votre fichier n'est pas mis en partage";
+        }
+}  
 
 // ---------------------------------------------------------------------
 //  mail informant de la mise à disposition du fichier par l'expéditeur 
@@ -56,14 +62,6 @@ $to = $_POST['emailDest'];
             $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
             mail($to, $object, $message, $headers);
 
-
-// message de confirmation fichier uploader et mail envoyé
-
-echo "Votre fichier <strong>". $_FILES['fichier']['name']. "</strong> est maintenant disponible à l'adresse de partage suivante :<br>";
-echo "http://localhost/sites/weTransfert/fichiers/".$nomDestination."<br>";
-echo "Un mail a été envoyé à ".$_POST['emailExp']. " pour l'informer de ce partage. <br>";
-echo "Les D codeurs du lac vous remercie d'avoir utiliser leur systeme de partage de fichier. <br>";
-echo $repertoireDestination;
 ?>
 
 
