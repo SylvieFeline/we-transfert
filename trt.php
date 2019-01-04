@@ -29,7 +29,6 @@ if ($_FILES['fichier']['error']) {
    $repertoireDestination = dirname(__FILE__)."/fichiers/";
    $nomDestination = "fichier_du_".date("YmdHis").".".$extensionFichier;
    
-   error_log("renomage passé");
 
 // par sécurité, modifier l'extension du fichier
 // en ajoutant une extention supplémentaire, en la remplaçant par une autre ou en la supprimant
@@ -38,12 +37,7 @@ if ($_FILES['fichier']['error']) {
 // --> déplacement du fichier  du répertoire temporaire vers un répertoire de destination:
 
 if ((isset($_FILES['fichier']['tmp_name'])&&($_FILES['fichier']['error'] == UPLOAD_ERR_OK))) {     
-    //$chemin_destination = "./fichiers/";  
-    //move_uploaded_file($_FILES['fichier']['tmp_name'], $chemin_destination.$nomDestination);
-     $resultat = move_uploaded_file($_FILES['fichier']['tmp_name'], $repertoireDestination.$nomDestination);
-    
-     if ($resultat) echo "transfert OK";
-    error_log($resultat);
+    move_uploaded_file($_FILES['fichier']['tmp_name'], $repertoireDestination.$nomDestination);
     }    
 
 // ---------------------------------------------------------------------
